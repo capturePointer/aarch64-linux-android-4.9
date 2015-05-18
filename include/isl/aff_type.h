@@ -17,11 +17,6 @@ typedef struct isl_pw_aff isl_pw_aff;
 
 ISL_DECLARE_LIST(pw_aff)
 
-struct isl_union_pw_aff;
-typedef struct isl_union_pw_aff isl_union_pw_aff;
-
-ISL_DECLARE_LIST_TYPE(union_pw_aff)
-
 struct isl_multi_aff;
 typedef struct isl_multi_aff isl_multi_aff;
 
@@ -31,13 +26,8 @@ typedef struct isl_pw_multi_aff isl_pw_multi_aff;
 struct isl_union_pw_multi_aff;
 typedef struct isl_union_pw_multi_aff isl_union_pw_multi_aff;
 
-ISL_DECLARE_LIST_TYPE(union_pw_multi_aff)
-
 struct isl_multi_pw_aff;
 typedef struct isl_multi_pw_aff isl_multi_pw_aff;
-
-struct isl_multi_union_pw_aff;
-typedef struct isl_multi_union_pw_aff isl_multi_union_pw_aff;
 
 #if defined(__cplusplus)
 }

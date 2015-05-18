@@ -69,3 +69,7 @@ Software development
                                   processing program.
 * gdbserver: (gdb) Server.      The GNU debugging server.
 * gprof: (gprof).               Profiling your program's execution
+
+Software libraries
+* mpfr: (mpfr).                 Multiple Precision Floating-Point Reliable 
+                                  Library.
