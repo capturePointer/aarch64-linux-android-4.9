@@ -1094,14 +1094,14 @@ extern "C" {
 #define mpfr_set_uj_2exp __gmpfr_set_uj_2exp
 #define mpfr_get_sj __gmpfr_mpfr_get_sj
 #define mpfr_get_uj __gmpfr_mpfr_get_uj
-__MPFR_DECLSPEC int mpfr_set_sj _MPFR_PROTO ((mpfr_t, intmax_t, mpfr_rnd_t));
+__MPFR_DECLSPEC int mpfr_set_sj _MPFR_PROTO ((mpfr_t, mpfr_exp_t, mpfr_rnd_t));
 __MPFR_DECLSPEC int
-  mpfr_set_sj_2exp _MPFR_PROTO ((mpfr_t, intmax_t, intmax_t, mpfr_rnd_t));
-__MPFR_DECLSPEC int mpfr_set_uj _MPFR_PROTO ((mpfr_t, uintmax_t, mpfr_rnd_t));
+  mpfr_set_sj_2exp _MPFR_PROTO ((mpfr_t, mpfr_exp_t, mpfr_exp_t, mpfr_rnd_t));
+__MPFR_DECLSPEC int mpfr_set_uj _MPFR_PROTO ((mpfr_t, mpfr_uexp_t, mpfr_rnd_t));
 __MPFR_DECLSPEC int
-  mpfr_set_uj_2exp _MPFR_PROTO ((mpfr_t, uintmax_t, intmax_t, mpfr_rnd_t));
-__MPFR_DECLSPEC intmax_t mpfr_get_sj _MPFR_PROTO ((mpfr_srcptr, mpfr_rnd_t));
-__MPFR_DECLSPEC uintmax_t mpfr_get_uj _MPFR_PROTO ((mpfr_srcptr, mpfr_rnd_t));
+  mpfr_set_uj_2exp _MPFR_PROTO ((mpfr_t, mpfr_uexp_t, mpfr_exp_t, mpfr_rnd_t));
+__MPFR_DECLSPEC mpfr_exp_t mpfr_get_sj _MPFR_PROTO ((mpfr_srcptr, mpfr_rnd_t));
+__MPFR_DECLSPEC mpfr_uexp_t mpfr_get_uj _MPFR_PROTO ((mpfr_srcptr, mpfr_rnd_t));
 
 #if defined (__cplusplus)
 }
