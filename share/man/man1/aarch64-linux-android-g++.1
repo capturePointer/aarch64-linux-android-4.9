@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "GCC 1"
-.TH GCC 1 "2014-08-27" "gcc-4.9.x-aosp-sabermod" "GNU"
+.TH GCC 1 "2015-07-16" "gcc-4.9.x-sabermod" "GNU"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -402,7 +402,8 @@ in the following sections.
 \&\-fdelete\-null\-pointer\-checks \-fdevirtualize \-fdevirtualize\-speculatively \-fdse 
 \&\-fearly\-inlining \-fipa\-sra \-fexpensive\-optimizations \-ffat\-lto\-objects 
 \&\-ffast\-math \-ffinite\-math\-only \-ffloat\-store \-fexcess\-precision=\fR\fIstyle\fR 
-\&\fB\-fforward\-propagate \-ffp\-contract=\fR\fIstyle\fR \fB\-ffunction\-sections 
+\&\fB\-fforward\-propagate \-ffp\-contract=\fR\fIstyle\fR 
+\&\fB\-ffunction\-attribute\-list \-ffunction\-sections 
 \&\-fgcse \-fgcse\-after\-reload \-fgcse\-las \-fgcse\-lm \-fgraphite\-identity 
 \&\-fgcse\-sm \-fhoist\-adjacent\-loads \-fif\-conversion 
 \&\-fif\-conversion2 \-findirect\-inlining 
@@ -489,7 +490,7 @@ in the following sections.
 .IP "\fILinker Options\fR" 4
 .IX Item "Linker Options"
 \&\fIobject-file-name\fR  \fB\-l\fR\fIlibrary\fR 
-\&\fB\-nostartfiles  \-nodefaultlibs  \-nostdlib \-pie \-rdynamic 
+\&\fB\-nostartfiles  \-nodefaultlibs \-no\-pie \-nostdlib \-pie \-rdynamic 
 \&\-s  \-static \-static\-libgcc \-static\-libstdc++ 
 \&\-static\-libasan \-static\-libtsan \-static\-liblsan \-static\-libubsan 
 \&\-shared \-shared\-libgcc  \-symbolic 
@@ -689,7 +690,6 @@ in the following sections.
 \&\fB\-mtune\-ctrl=\fR\fIfeature-list\fR \fB\-mdump\-tune\-features \-mno\-default 
 \&\-mfpmath=\fR\fIunit\fR 
 \&\fB\-masm=\fR\fIdialect\fR  \fB\-mno\-fancy\-math\-387 
-\&\-mcopyrelocs 
 \&\-mno\-fp\-ret\-in\-387  \-msoft\-float 
 \&\-mno\-wide\-multiply  \-mrtd  \-malign\-double 
 \&\-mpreferred\-stack\-boundary=\fR\fInum\fR 
@@ -805,7 +805,7 @@ in the following sections.
 \&\-minterlink\-mips16  \-mno\-interlink\-mips16 
 \&\-mabi=\fR\fIabi\fR  \fB\-mabicalls  \-mno\-abicalls 
 \&\-mshared  \-mno\-shared  \-mplt  \-mno\-plt  \-mxgot  \-mno\-xgot 
-\&\-mgp32  \-mgp64  \-mfp32  \-mfp64  \-mhard\-float  \-msoft\-float 
+\&\-mgp32  \-mgp64  \-mfp32  \-mfpxx  \-mfp64  \-mhard\-float  \-msoft\-float 
 \&\-mno\-float  \-msingle\-float  \-mdouble\-float 
 \&\-modd\-spreg \-mno\-odd\-spreg 
 \&\-mabs=\fR\fImode\fR  \fB\-mnan=\fR\fIencoding\fR 
@@ -861,7 +861,7 @@ in the following sections.
 .Sp
 \&\fI\s-1MSP430\s0 Options\fR
 \&\fB\-msim \-masm\-hex \-mmcu= \-mcpu= \-mlarge \-msmall \-mrelax 
-\&\-mhwmult=\fR
+\&\-mhwmult= \-minrt\fR
 .Sp
 \&\fI\s-1NDS32\s0 Options\fR
 \&\fB\-mbig\-endian \-mlittle\-endian 
@@ -1111,7 +1111,7 @@ See S/390 and zSeries Options.
 \&\-finstrument\-functions\-exclude\-function\-list=\fR\fIsym\fR\fB,\fR\fIsym\fR\fB,... 
 \&\-finstrument\-functions\-exclude\-file\-list=\fR\fIfile\fR\fB,\fR\fIfile\fR\fB,... 
 \&\-fno\-common  \-fno\-ident 
-\&\-fpcc\-struct\-return  \-fpic  \-fPIC \-fpie \-fPIE 
+\&\-fpcc\-struct\-return  \-fpic  \-fPIC \-fpie \-fPIE \-fno\-plt 
 \&\-fno\-jump\-tables 
 \&\-frecord\-gcc\-switches 
 \&\-freg\-struct\-return  \-fshort\-enums 
@@ -4911,6 +4911,10 @@ more details.  The run-time behavior can be influenced using the
 \&\fB\s-1ASAN_OPTIONS\s0\fR environment variable; see
 <\fBhttps://code.google.com/p/address\-sanitizer/wiki/Flags#Run\-time_flags\fR> for
 a list of supported options.
+.IP "\fB\-fsanitize=kernel\-address\fR" 4
+.IX Item "-fsanitize=kernel-address"
+Enable AddressSanitizer for Linux kernel.
+See <\fBhttp://code.google.com/p/address\-sanitizer/wiki/AddressSanitizerForKernel\fR> for more details.
 .IP "\fB\-fsanitize=thread\fR" 4
 .IX Item "-fsanitize=thread"
 Enable ThreadSanitizer, a fast data race detector.
@@ -6871,6 +6875,15 @@ registers after writing to their lower 32\-bit half.
 .Sp
 Enabled for Alpha, AArch64 and x86 at levels \fB\-O2\fR,
 \&\fB\-O3\fR, \fB\-Os\fR.
+.IP "\fB\-fno\-lifetime\-dse\fR" 4
+.IX Item "-fno-lifetime-dse"
+In \*(C+ the value of an object is only affected by changes within its
+lifetime: when the constructor begins, the object has an indeterminate
+value, and any changes during the lifetime of the object are dead when
+the object is destroyed.  Normally dead store elimination will take
+advantage of this; if your code relies on the value of the object
+storage persisting beyond the lifetime of the object, you can use this
+flag to disable this optimization.
 .IP "\fB\-flive\-range\-shrinkage\fR" 4
 .IX Item "-flive-range-shrinkage"
 Attempt to decrease register pressure through register live range
@@ -8680,6 +8693,15 @@ create larger object and executable files and are also slower.
 You cannot use \f(CW\*(C`gprof\*(C'\fR on all systems if you
 specify this option, and you may have problems with debugging if
 you specify both this option and \fB\-g\fR.
+.IP "\fB\-ffunction\-attribute\-list\fR" 4
+.IX Item "-ffunction-attribute-list"
+List of function name patterns that will be applied specified attribute.
+For example, the following command line will add \*(L"cold\*(R" attribute to
+functions that has \*(L"ErrorMessage\*(R" in its name.
+.Sp
+.Vb 1
+\&        gcc \-ffunction\-atribute\-list=cold:ErrorMessage \-c foo.c
+.Ve
 .IP "\fB\-fbranch\-target\-load\-optimize\fR" 4
 .IX Item "-fbranch-target-load-optimize"
 Perform branch target register load optimization before prologue / epilogue
@@ -9634,6 +9656,12 @@ Enable detection of use-after-return.  This kind of protection
 is enabled by default when using \fB\-fsanitize=address\fR option.
 To disable use-after-return detection use 
 \&\fB\-\-param asan\-use\-after\-return=0\fR.
+.IP "\fBasan-instrumentation-with-call-threshold\fR" 4
+.IX Item "asan-instrumentation-with-call-threshold"
+If number of memory accesses in function being instrumented
+is greater or equal to this number, use callbacks instead of inline checks.
+E.g. to disable inline code use
+\&\fB\-\-param asan\-instrumentation\-with\-call\-threshold=0\fR.
 .RE
 .RS 4
 .RE
@@ -10533,6 +10561,10 @@ The compiler may generate calls to \f(CW\*(C`memcmp\*(C'\fR,
 These entries are usually resolved by entries in
 libc.  These entry points should be supplied through some other
 mechanism when this option is specified.
+.IP "\fB\-no\-pie\fR" 4
+.IX Item "-no-pie"
+Produce a position dependent executable.  This is the negative of option
+\&\fB\-pie\fR which produces a position independent executable.
 .IP "\fB\-nostdlib\fR" 4
 .IX Item "-nostdlib"
 Do not use the standard system startup files or libraries when linking.
@@ -11651,8 +11683,8 @@ architecture together with the optional \s-1CRC32\s0 extensions.
 .Sp
 \&\fB\-march=native\fR causes the compiler to auto-detect the architecture
 of the build computer.  At present, this feature is only supported on
-Linux, and not all architectures are recognized.  If the auto-detect is
-unsuccessful the option has no effect.
+GNU/Linux, and not all architectures are recognized.  If the auto-detect
+is unsuccessful the option has no effect.
 .IP "\fB\-mtune=\fR\fIname\fR" 4
 .IX Item "-mtune=name"
 This option specifies the name of the target \s-1ARM\s0 processor for
@@ -11702,7 +11734,7 @@ this option may change in future \s-1GCC\s0 versions as \s-1CPU\s0 models come a
 .Sp
 \&\fB\-mtune=native\fR causes the compiler to auto-detect the \s-1CPU\s0
 of the build computer.  At present, this feature is only supported on
-Linux, and not all architectures are recognized.  If the auto-detect is
+GNU/Linux, and not all architectures are recognized.  If the auto-detect is
 unsuccessful the option has no effect.
 .IP "\fB\-mcpu=\fR\fIname\fR" 4
 .IX Item "-mcpu=name"
@@ -11722,8 +11754,8 @@ See \fB\-mtune\fR for more information.
 .Sp
 \&\fB\-mcpu=native\fR causes the compiler to auto-detect the \s-1CPU\s0
 of the build computer.  At present, this feature is only supported on
-Linux, and not all architectures are recognized.  If the auto-detect is
-unsuccessful the option has no effect.
+GNU/Linux, and not all architectures are recognized.  If the auto-detect
+is unsuccessful the option has no effect.
 .IP "\fB\-mfpu=\fR\fIname\fR" 4
 .IX Item "-mfpu=name"
 This specifies what floating-point hardware (or hardware emulation) is
@@ -14305,16 +14337,6 @@ not support \fBintel\fR.
 Control whether or not the compiler uses \s-1IEEE\s0 floating-point
 comparisons.  These correctly handle the case where the result of a
 comparison is unordered.
-.IP "\fB\-mcopyrelocs\fR" 4
-.IX Item "-mcopyrelocs"
-.PD 0
-.IP "\fB\-mno\-copyrelocs\fR" 4
-.IX Item "-mno-copyrelocs"
-.PD
-With \fB\-fpie\fR and \fBfPIE\fR, copy relocations support allows the
-compiler to assume that all symbol references are local.  This allows the
-compiler to skip the \s-1GOT\s0 for global accesses and this applies only to the
-x86\-64 architecture.
 .IP "\fB\-msoft\-float\fR" 4
 .IX Item "-msoft-float"
 Generate output containing library calls for floating point.
@@ -16296,7 +16318,7 @@ The processor names are:
 \&\fBloongson2e\fR, \fBloongson2f\fR, \fBloongson3a\fR,
 \&\fBm4k\fR,
 \&\fBm14k\fR, \fBm14kc\fR, \fBm14ke\fR, \fBm14kec\fR,
-\&\fBocteon\fR, \fBocteon+\fR, \fBocteon2\fR,
+\&\fBocteon\fR, \fBocteon+\fR, \fBocteon2\fR, \fBocteon3\fR,
 \&\fBorion\fR,
 \&\fBp5600\fR,
 \&\fBr2000\fR, \fBr3000\fR, \fBr3900\fR, \fBr4000\fR, \fBr4400\fR,
@@ -16468,7 +16490,20 @@ same, but each scalar value is passed in a single 64\-bit register
 rather than a pair of 32\-bit registers.  For example, scalar
 floating-point values are returned in \fB\f(CB$f0\fB\fR only, not a
 \&\fB\f(CB$f0\fB\fR/\fB\f(CB$f1\fB\fR pair.  The set of call-saved registers also
-remains the same, but all 64 bits are saved.
+remains the same in that the even-numbered double-precision registers
+are saved.
+.Sp
+Two additional variants of the o32 \s-1ABI\s0 are supported to enable
+a transition from 32\-bit to 64\-bit registers.  These are \s-1FPXX
+\&\s0(\fB\-mfpxx\fR) and \s-1FP64A \s0(\fB\-mfp64\fR \fB\-mno\-odd\-spreg\fR).
+The \s-1FPXX\s0 extension mandates that all code must execute correctly
+when run using 32\-bit or 64\-bit registers.  The code can be interlinked
+with either \s-1FP32\s0 or \s-1FP64,\s0 but not both.
+The \s-1FP64A\s0 extension is similar to the \s-1FP64\s0 extension but forbids the
+use of odd-numbered single-precision registers.  This can be used
+in conjunction with the \f(CW\*(C`FRE\*(C'\fR mode of FPUs in \s-1MIPS32R5\s0
+processors and allows both \s-1FP32\s0 and \s-1FP64A\s0 code to interlink and
+run in the same process without changing \s-1FPU\s0 modes.
 .IP "\fB\-mabicalls\fR" 4
 .IX Item "-mabicalls"
 .PD 0
@@ -16557,6 +16592,9 @@ Assume that floating-point registers are 32 bits wide.
 .IP "\fB\-mfp64\fR" 4
 .IX Item "-mfp64"
 Assume that floating-point registers are 64 bits wide.
+.IP "\fB\-mfpxx\fR" 4
+.IX Item "-mfpxx"
+Do not assume the width of floating-point registers.
 .IP "\fB\-mhard\-float\fR" 4
 .IX Item "-mhard-float"
 Use floating-point coprocessor instructions.
@@ -16590,9 +16628,9 @@ operations.  This is the default.
 .IX Item "-mno-odd-spreg"
 .PD
 Enable the use of odd-numbered single-precision floating-point registers
-for the O32 \s-1ABI. \s0 This is the default for specific processors that are
-known to support these registers.  The O32 \s-1FPXX\s0 extension sets
-\&\f(CW\*(C`\-mno\-odd\-spreg\*(C'\fR by default when targetting generic architectures.
+for the o32 \s-1ABI. \s0 This is the default for processors that are known to
+support these registers.  When using the o32 \s-1FPXX ABI, \s0\f(CW\*(C`\-mno\-odd\-spreg\*(C'\fR
+is set by default.
 .IP "\fB\-mabs=2008\fR" 4
 .IX Item "-mabs=2008"
 .PD 0
@@ -17530,6 +17568,12 @@ inline.  This makes for bigger, but faster code.
 The hardware multiply routines disable interrupts whilst running and
 restore the previous interrupt state when they finish.  This makes
 them safe to use inside interrupt handlers as well as in normal code.
+.IP "\fB\-minrt\fR" 4
+.IX Item "-minrt"
+Enable the use of a minimum runtime environment \- no static
+initializers or constructors.  This is intended for memory-constrained
+devices.  The compiler will include special symbols in some objects
+that tell the linker and runtime which code fragments are required.
 .PP
 \fI\s-1NDS32\s0 Options\fR
 .IX Subsection "NDS32 Options"
@@ -20208,8 +20252,8 @@ the rules of the \s-1ABI.\s0
 Set the instruction set, register set, and instruction scheduling parameters
 for machine type \fIcpu_type\fR.  Supported values for \fIcpu_type\fR are
 \&\fBv7\fR, \fBcypress\fR, \fBv8\fR, \fBsupersparc\fR, \fBhypersparc\fR,
-\&\fBleon\fR, \fBleon3\fR, \fBsparclite\fR, \fBf930\fR, \fBf934\fR,
-\&\fBsparclite86x\fR, \fBsparclet\fR, \fBtsc701\fR, \fBv9\fR,
+\&\fBleon\fR, \fBleon3\fR, \fBleon3v7\fR, \fBsparclite\fR, \fBf930\fR,
+\&\fBf934\fR, \fBsparclite86x\fR, \fBsparclet\fR, \fBtsc701\fR, \fBv9\fR,
 \&\fBultrasparc\fR, \fBultrasparc3\fR, \fBniagara\fR, \fBniagara2\fR,
 \&\fBniagara3\fR and \fBniagara4\fR.
 .Sp
@@ -20227,7 +20271,7 @@ implementations.
 .RS 4
 .IP "v7" 4
 .IX Item "v7"
-cypress
+cypress, leon3v7
 .IP "v8" 4
 .IX Item "v8"
 supersparc, hypersparc, leon, leon3
@@ -20293,11 +20337,11 @@ option \fB\-mcpu=\fR\fIcpu_type\fR does.
 The same values for \fB\-mcpu=\fR\fIcpu_type\fR can be used for
 \&\fB\-mtune=\fR\fIcpu_type\fR, but the only useful values are those
 that select a particular \s-1CPU\s0 implementation.  Those are \fBcypress\fR,
-\&\fBsupersparc\fR, \fBhypersparc\fR, \fBleon\fR, \fBleon3\fR, \fBf930\fR,
-\&\fBf934\fR, \fBsparclite86x\fR, \fBtsc701\fR, \fBultrasparc\fR,
-\&\fBultrasparc3\fR, \fBniagara\fR, \fBniagara2\fR, \fBniagara3\fR and
-\&\fBniagara4\fR.  With native Solaris and GNU/Linux toolchains, \fBnative\fR
-can also be used.
+\&\fBsupersparc\fR, \fBhypersparc\fR, \fBleon\fR, \fBleon3\fR,
+\&\fBleon3v7\fR, \fBf930\fR, \fBf934\fR, \fBsparclite86x\fR, \fBtsc701\fR,
+\&\fBultrasparc\fR, \fBultrasparc3\fR, \fBniagara\fR, \fBniagara2\fR,
+\&\fBniagara3\fR and \fBniagara4\fR.  With native Solaris and GNU/Linux
+toolchains, \fBnative\fR can also be used.
 .IP "\fB\-mv8plus\fR" 4
 .IX Item "-mv8plus"
 .PD 0
@@ -21376,6 +21420,23 @@ used during linking.
 \&\fB\-fpie\fR and \fB\-fPIE\fR both define the macros
 \&\f(CW\*(C`_\|_pie_\|_\*(C'\fR and \f(CW\*(C`_\|_PIE_\|_\*(C'\fR.  The macros have the value 1
 for \fB\-fpie\fR and 2 for \fB\-fPIE\fR.
+.IP "\fB\-fno\-plt\fR" 4
+.IX Item "-fno-plt"
+Do not use \s-1PLT\s0 for external function calls in position-independent code.
+Instead, load callee address at call site from \s-1GOT\s0 and branch to it.
+This leads to more efficient code by eliminating \s-1PLT\s0 stubs and exposing
+\&\s-1GOT\s0 load to optimizations.  On architectures such as 32\-bit x86 where
+\&\s-1PLT\s0 stubs expect \s-1GOT\s0 pointer in a specific register, this gives more
+register allocation freedom to the compiler.  Lazy binding requires \s-1PLT:\s0
+with \fB\-fno\-plt\fR all external symbols are resolved at load time.
+.Sp
+Alternatively, function attribute \f(CW\*(C`noplt\*(C'\fR can be used to avoid \s-1PLT\s0
+for calls to specific external functions by marking those functions with
+this attribute.
+.Sp
+Additionally, a few targets also convert calls to those functions that are
+marked to not use the \s-1PLT\s0 to use the \s-1GOT\s0 instead for non-position independent
+code.
 .IP "\fB\-fno\-jump\-tables\fR" 4
 .IX Item "-fno-jump-tables"
 Do not use jump tables for switch statements even where it would be
