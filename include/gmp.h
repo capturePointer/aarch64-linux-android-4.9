@@ -1158,6 +1158,9 @@ __GMP_DECLSPEC int _mpq_cmp_si (mpq_srcptr, long, unsigned long) __GMP_ATTRIBUTE
 #define _mpq_cmp_ui __gmpq_cmp_ui
 __GMP_DECLSPEC int _mpq_cmp_ui (mpq_srcptr, unsigned long int, unsigned long int) __GMP_ATTRIBUTE_PURE;
 
+#define mpq_cmp_z __gmpq_cmp_z
+__GMP_DECLSPEC int mpq_cmp_z (mpq_srcptr, mpz_srcptr) __GMP_ATTRIBUTE_PURE;
+
 #define mpq_div __gmpq_div
 __GMP_DECLSPEC void mpq_div (mpq_ptr, mpq_srcptr, mpq_srcptr);
 
@@ -1264,6 +1267,9 @@ __GMP_DECLSPEC void mpf_clears (mpf_ptr, ...);
 
 #define mpf_cmp __gmpf_cmp
 __GMP_DECLSPEC int mpf_cmp (mpf_srcptr, mpf_srcptr) __GMP_NOTHROW __GMP_ATTRIBUTE_PURE;
+
+#define mpf_cmp_z __gmpf_cmp_z
+__GMP_DECLSPEC int mpf_cmp_z (mpf_srcptr, mpz_srcptr) __GMP_NOTHROW __GMP_ATTRIBUTE_PURE;
 
 #define mpf_cmp_d __gmpf_cmp_d
 __GMP_DECLSPEC int mpf_cmp_d (mpf_srcptr, double) __GMP_ATTRIBUTE_PURE;
